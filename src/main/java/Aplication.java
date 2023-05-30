@@ -3,6 +3,7 @@ import DocumentFilter.FilterFormat;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,13 +49,13 @@ public class Aplication {
             @Override
             public void actionPerformed(ActionEvent e) {
                 numbers = new ArrayList<>();
-                for(JTextField j : textFieldsIPv4) {
-                    if(!j.getText().isEmpty())
+                if(!isEmpty(textFieldsIPv4)) {
+                    for(JTextField j : textFieldsIPv4) {
                         numbers.add(j.getText());
-                    else JOptionPane.showMessageDialog(null, "Llene todos los cuadros de texto, por favor.");
-                }
+                    }
+                } else JOptionPane.showMessageDialog(null, "Llene todos los cuadros de texto, por favor.");
 
-                String ipv4Text = numbers.stream().map(x -> x).collect(Collectors.joining("."));
+                String ipv4Text = String.join(".", numbers);
                 String decimalText = redes.conversionDecimalIPv4(ipv4Text);
                 textAreaIPv4.setText(decimalText);
 
@@ -71,14 +72,14 @@ public class Aplication {
             @Override
             public void actionPerformed(ActionEvent e) {
                 numbers = new ArrayList<>();
-                for(JTextField j : textFieldsIPv6) {
-                    if(!j.getText().isEmpty())
+                if(isEmpty(textFieldsIPv6)) {
+                    for (JTextField j : textFieldsIPv6) {
                         numbers.add(j.getText());
-                    else JOptionPane.showMessageDialog(null, "Llene todos los cuadros de texto, por favor.");
-                }
+                    }
+                } else JOptionPane.showMessageDialog(null, "Llene todos los cuadros de texto, por favor.");
 
-                String ipv4Text = numbers.stream().map(x -> x).collect(Collectors.joining(":"));
-                String decimalText = redes.conversionDecimalIPv4(ipv4Text);
+                String ipv6Text = String.join(":", numbers);
+                String decimalText = redes.conversionDecimalIPv4(ipv6Text);
                 textAreaIPv6.setText(decimalText);
 
                 for (JTextField j: textFieldsIPv6) {
@@ -88,6 +89,52 @@ public class Aplication {
                 numbers.clear();
             }
         });
+        permutarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isRepeticion = comboBoxOpcionesPermutacion.getSelectedItem().toString().equals("Con repetición");
+                int totalDatos;
+                    totalDatos = Integer.parseInt(textFieldPermutacion.getText());
+                if(!isRepeticion) {
+                    textAreaPermutacion.setText(permutacionCombinacion.permutacionSinRepeticion(totalDatos).toString());
+                } else {
+                    int m = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de variables que se repiten:"));
+                    int[] numbers = new int[m];
+                    for (int i = 0; i < m; i++) {
+                         numbers[i] = Integer.parseInt(JOptionPane.showInputDialog("Ingrese un número:"));
+                    }
+
+                    if(Arrays.stream(numbers).sum() <= totalDatos && Arrays.stream(numbers).filter(x -> x <= 0).findAny().isEmpty())
+                        textAreaPermutacion.setText(permutacionCombinacion.permutacionConRepeticion(totalDatos, numbers).toString());
+                    else
+                        JOptionPane.showMessageDialog(null, "Los números ingresados para la repetición deben ser positivos y" +
+                                " menores que el total de datos.");
+                }
+
+                textFieldPermutacion.setText("");
+            }
+        });
+        combinarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isRepeticion = comboBoxOpcionesCombinacion.getSelectedItem().toString().equals("Con repetición");
+                int totalElementos = Integer.parseInt(textFieldCombinacionTotal.getText());
+                int numeroDeElementosRepetidos = Integer.parseInt(textFieldCombinacionMuestra.getText());
+
+                if(!isRepeticion && numeroDeElementosRepetidos <= totalElementos) {
+                    textAreaCombinacion.setText(permutacionCombinacion.combinacionSinRepeticion(totalElementos, numeroDeElementosRepetidos).toString());
+                } else if(isRepeticion && numeroDeElementosRepetidos <= totalElementos) {
+                    textAreaCombinacion.setText(permutacionCombinacion.combinacionConRepeticion(totalElementos, numeroDeElementosRepetidos).toString());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Datos no válidos el total de elementos debe ser mayor al" +
+                            " número de elementos seleccionados.");
+                }
+            }
+        });
+    }
+
+    public boolean isEmpty(List<JTextField> fields) {
+        return fields.stream().anyMatch(x -> x.getText().isEmpty());
     }
 
     private void createUIComponents() {

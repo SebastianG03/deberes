@@ -50,6 +50,8 @@ public class OperacionesRedes {
         return true;
     }
 
+
+    //
     private int toDecimal(String str) {
         int decimal = 0;
         int cont = 0;
