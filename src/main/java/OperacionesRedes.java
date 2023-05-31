@@ -33,6 +33,11 @@ public class OperacionesRedes {
         }
     }*/
 
+    /**
+     * @param arr
+     *          Acepta un array tipo String con una posible red IPv4
+     * @return {@code true} Si, y solo si, cumple con las condiciones especificadas.
+     * */
     public boolean isIPv4(String [] arr) {
         int number = 0;
         int len = arr.length;
@@ -51,7 +56,10 @@ public class OperacionesRedes {
     }
 
 
-    //
+    /**
+     * @param str
+     *          Recibe un String conformado de 0 y 1 y lo transforma de binario a decimal.
+     * */
     private int toDecimal(String str) {
         int decimal = 0;
         int cont = 0;
@@ -67,7 +75,7 @@ public class OperacionesRedes {
     }
 
 
-    //@TODO transformar el número de binario a hexadecimal antes de transformar a decimal
+
     public String conversionDecimalIPv6(String ipv6) {
         String[] str = ipv6.split(":");
         String decimal = "";
@@ -78,6 +86,12 @@ public class OperacionesRedes {
         return decimal;
     }
 
+    /**
+     * @param arr
+     *          Array tipo String que contien una posible red IPv6 en binario.
+     * @return {@code true}Si, y solo si, cumple con las condiciones especificadas, es decir no es menor al mínimo global de 0
+     * ni mayor al máximo global que es el resultado de la conversión a decimal del hexadecimal FFFF.
+     * */
     public boolean isIPv6(String[] arr) {
         int number = 0;
         int len = arr.length;

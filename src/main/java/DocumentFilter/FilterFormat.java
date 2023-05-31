@@ -6,10 +6,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.*;
+import java.util.regex.PatternSyntaxException;
 
 public class FilterFormat extends DocumentFilter {
 
-    /*
+    /**
     *@param format
     *       Enviar un 4 si el formato es de IPv4, 6 si es IPv6, si envia cualquier número
     *       el formato por defecto tendrá una longitud de 10 caracteres.
